@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { ThemeProvider } from 'next-themes'
+// import { ThemeProvider } from 'next-themes'
 
 import { routeTree } from './routeTree.gen'
 
@@ -26,10 +26,10 @@ declare module '@tanstack/react-router' {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <RouterProvider router={router} />
-        <Toaster />
-      </ThemeProvider>
+      {/* <ThemeProvider attribute="class" defaultTheme="system" enableSystem> */}
+      <RouterProvider router={router} />
+      <Toaster />
+      {/* </ThemeProvider> */}
     </QueryClientProvider>
   )
 }

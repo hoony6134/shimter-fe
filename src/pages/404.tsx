@@ -8,7 +8,7 @@ function Page404() {
       <div className="max-w-lg mx-auto">
         {/* 404 큰 숫자 */}
         <div className="mb-8">
-          <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-teal-500 mb-4">
+          <h1 className="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-emerald-600 to-teal-500 mb-4">
             404
           </h1>
         </div>
@@ -29,7 +29,7 @@ function Page404() {
         {/* 액션 버튼들 */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link to="/">
-            <Button className="bg-gradient-to-br from-blue-600 to-teal-500 min-w-32">
+            <Button className="bg-gradient-to-br from-emerald-600 to-teal-500 min-w-32">
               홈으로 돌아가기
             </Button>
           </Link>
@@ -48,7 +48,7 @@ function Page404() {
           <div className="flex flex-wrap gap-4 justify-center text-sm">
             <a
               href="mailto:campass@scian.xyz"
-              className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+              className="text-emerald-600 hover:text-blue-800 hover:underline transition-colors"
             >
               문의하기
             </a>

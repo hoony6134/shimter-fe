@@ -78,7 +78,7 @@ export function SignInForm() {
           계정이 없나요?
           <Link
             to="/auth/sign-up"
-            className="ml-3 relative inline-block text-blue-600 font-semibold after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+            className="ml-3 relative inline-block text-emerald-600 font-semibold after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 after:bg-emerald-600 after:transition-all after:duration-300 hover:after:w-full"
           >
             회원가입
           </Link>

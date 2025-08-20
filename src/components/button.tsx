@@ -12,10 +12,10 @@ function Button({
 }: ButtonProps) {
   let variantClasses = ''
   if (variant === 'primary') {
-    variantClasses = 'bg-blue-600 text-white hover:opacity-90'
+    variantClasses = 'bg-emerald-600 text-white hover:opacity-90'
   } else if (variant === 'outline') {
     variantClasses =
-      'border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-50'
+      'border border-emerald-600 text-emerald-600 bg-transparent hover:bg-blue-50'
   } else if (variant === 'disabled') {
     variantClasses = 'bg-gray-300 text-gray-600 cursor-not-allowed opacity-60'
   }

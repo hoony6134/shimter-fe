@@ -11,20 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRequiredRouteImport } from './routes/_auth-required'
 import { Route as R404RouteImport } from './routes/404'
-import { Route as WikiRouteRouteImport } from './routes/wiki/route'
-import { Route as DormRouteRouteImport } from './routes/dorm/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as WikiIndexRouteImport } from './routes/wiki/index'
-import { Route as DormIndexRouteImport } from './routes/dorm/index'
-import { Route as WikiNewRouteImport } from './routes/wiki/new'
-import { Route as DormTipRouteImport } from './routes/dorm/tip'
-import { Route as DormInfoRouteImport } from './routes/dorm/info'
 import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthRequiredDashboardRouteImport } from './routes/_auth-required/dashboard'
-import { Route as DormReservationIndexRouteImport } from './routes/dorm/reservation/index'
-import { Route as DormReservationDormADiscussionRoomRouteImport } from './routes/dorm/reservation/dorm-a-discussion-room'
 
 const AuthRequiredRoute = AuthRequiredRouteImport.update({
   id: '/_auth-required',
@@ -35,45 +26,10 @@ const R404Route = R404RouteImport.update({
   path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WikiRouteRoute = WikiRouteRouteImport.update({
-  id: '/wiki',
-  path: '/wiki',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DormRouteRoute = DormRouteRouteImport.update({
-  id: '/dorm',
-  path: '/dorm',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const WikiIndexRoute = WikiIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => WikiRouteRoute,
-} as any)
-const DormIndexRoute = DormIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DormRouteRoute,
-} as any)
-const WikiNewRoute = WikiNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => WikiRouteRoute,
-} as any)
-const DormTipRoute = DormTipRouteImport.update({
-  id: '/tip',
-  path: '/tip',
-  getParentRoute: () => DormRouteRoute,
-} as any)
-const DormInfoRoute = DormInfoRouteImport.update({
-  id: '/info',
-  path: '/info',
-  getParentRoute: () => DormRouteRoute,
 } as any)
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
   id: '/auth/verify',
@@ -95,34 +51,14 @@ const AuthRequiredDashboardRoute = AuthRequiredDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRequiredRoute,
 } as any)
-const DormReservationIndexRoute = DormReservationIndexRouteImport.update({
-  id: '/reservation/',
-  path: '/reservation/',
-  getParentRoute: () => DormRouteRoute,
-} as any)
-const DormReservationDormADiscussionRoomRoute =
-  DormReservationDormADiscussionRoomRouteImport.update({
-    id: '/reservation/dorm-a-discussion-room',
-    path: '/reservation/dorm-a-discussion-room',
-    getParentRoute: () => DormRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dorm': typeof DormRouteRouteWithChildren
-  '/wiki': typeof WikiRouteRouteWithChildren
   '/404': typeof R404Route
   '/dashboard': typeof AuthRequiredDashboardRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/dorm/info': typeof DormInfoRoute
-  '/dorm/tip': typeof DormTipRoute
-  '/wiki/new': typeof WikiNewRoute
-  '/dorm/': typeof DormIndexRoute
-  '/wiki/': typeof WikiIndexRoute
-  '/dorm/reservation/dorm-a-discussion-room': typeof DormReservationDormADiscussionRoomRoute
-  '/dorm/reservation': typeof DormReservationIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -131,51 +67,26 @@ export interface FileRoutesByTo {
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/dorm/info': typeof DormInfoRoute
-  '/dorm/tip': typeof DormTipRoute
-  '/wiki/new': typeof WikiNewRoute
-  '/dorm': typeof DormIndexRoute
-  '/wiki': typeof WikiIndexRoute
-  '/dorm/reservation/dorm-a-discussion-room': typeof DormReservationDormADiscussionRoomRoute
-  '/dorm/reservation': typeof DormReservationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dorm': typeof DormRouteRouteWithChildren
-  '/wiki': typeof WikiRouteRouteWithChildren
   '/404': typeof R404Route
   '/_auth-required': typeof AuthRequiredRouteWithChildren
   '/_auth-required/dashboard': typeof AuthRequiredDashboardRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/auth/verify': typeof AuthVerifyRoute
-  '/dorm/info': typeof DormInfoRoute
-  '/dorm/tip': typeof DormTipRoute
-  '/wiki/new': typeof WikiNewRoute
-  '/dorm/': typeof DormIndexRoute
-  '/wiki/': typeof WikiIndexRoute
-  '/dorm/reservation/dorm-a-discussion-room': typeof DormReservationDormADiscussionRoomRoute
-  '/dorm/reservation/': typeof DormReservationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dorm'
-    | '/wiki'
     | '/404'
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
-    | '/dorm/info'
-    | '/dorm/tip'
-    | '/wiki/new'
-    | '/dorm/'
-    | '/wiki/'
-    | '/dorm/reservation/dorm-a-discussion-room'
-    | '/dorm/reservation'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,37 +95,19 @@ export interface FileRouteTypes {
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
-    | '/dorm/info'
-    | '/dorm/tip'
-    | '/wiki/new'
-    | '/dorm'
-    | '/wiki'
-    | '/dorm/reservation/dorm-a-discussion-room'
-    | '/dorm/reservation'
   id:
     | '__root__'
     | '/'
-    | '/dorm'
-    | '/wiki'
     | '/404'
     | '/_auth-required'
     | '/_auth-required/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/auth/verify'
-    | '/dorm/info'
-    | '/dorm/tip'
-    | '/wiki/new'
-    | '/dorm/'
-    | '/wiki/'
-    | '/dorm/reservation/dorm-a-discussion-room'
-    | '/dorm/reservation/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DormRouteRoute: typeof DormRouteRouteWithChildren
-  WikiRouteRoute: typeof WikiRouteRouteWithChildren
   R404Route: typeof R404Route
   AuthRequiredRoute: typeof AuthRequiredRouteWithChildren
   AuthSignInRoute: typeof AuthSignInRoute
@@ -238,61 +131,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/wiki': {
-      id: '/wiki'
-      path: '/wiki'
-      fullPath: '/wiki'
-      preLoaderRoute: typeof WikiRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dorm': {
-      id: '/dorm'
-      path: '/dorm'
-      fullPath: '/dorm'
-      preLoaderRoute: typeof DormRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/wiki/': {
-      id: '/wiki/'
-      path: '/'
-      fullPath: '/wiki/'
-      preLoaderRoute: typeof WikiIndexRouteImport
-      parentRoute: typeof WikiRouteRoute
-    }
-    '/dorm/': {
-      id: '/dorm/'
-      path: '/'
-      fullPath: '/dorm/'
-      preLoaderRoute: typeof DormIndexRouteImport
-      parentRoute: typeof DormRouteRoute
-    }
-    '/wiki/new': {
-      id: '/wiki/new'
-      path: '/new'
-      fullPath: '/wiki/new'
-      preLoaderRoute: typeof WikiNewRouteImport
-      parentRoute: typeof WikiRouteRoute
-    }
-    '/dorm/tip': {
-      id: '/dorm/tip'
-      path: '/tip'
-      fullPath: '/dorm/tip'
-      preLoaderRoute: typeof DormTipRouteImport
-      parentRoute: typeof DormRouteRoute
-    }
-    '/dorm/info': {
-      id: '/dorm/info'
-      path: '/info'
-      fullPath: '/dorm/info'
-      preLoaderRoute: typeof DormInfoRouteImport
-      parentRoute: typeof DormRouteRoute
     }
     '/auth/verify': {
       id: '/auth/verify'
@@ -322,57 +166,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRequiredDashboardRouteImport
       parentRoute: typeof AuthRequiredRoute
     }
-    '/dorm/reservation/': {
-      id: '/dorm/reservation/'
-      path: '/reservation'
-      fullPath: '/dorm/reservation'
-      preLoaderRoute: typeof DormReservationIndexRouteImport
-      parentRoute: typeof DormRouteRoute
-    }
-    '/dorm/reservation/dorm-a-discussion-room': {
-      id: '/dorm/reservation/dorm-a-discussion-room'
-      path: '/reservation/dorm-a-discussion-room'
-      fullPath: '/dorm/reservation/dorm-a-discussion-room'
-      preLoaderRoute: typeof DormReservationDormADiscussionRoomRouteImport
-      parentRoute: typeof DormRouteRoute
-    }
   }
 }
-
-interface DormRouteRouteChildren {
-  DormInfoRoute: typeof DormInfoRoute
-  DormTipRoute: typeof DormTipRoute
-  DormIndexRoute: typeof DormIndexRoute
-  DormReservationDormADiscussionRoomRoute: typeof DormReservationDormADiscussionRoomRoute
-  DormReservationIndexRoute: typeof DormReservationIndexRoute
-}
-
-const DormRouteRouteChildren: DormRouteRouteChildren = {
-  DormInfoRoute: DormInfoRoute,
-  DormTipRoute: DormTipRoute,
-  DormIndexRoute: DormIndexRoute,
-  DormReservationDormADiscussionRoomRoute:
-    DormReservationDormADiscussionRoomRoute,
-  DormReservationIndexRoute: DormReservationIndexRoute,
-}
-
-const DormRouteRouteWithChildren = DormRouteRoute._addFileChildren(
-  DormRouteRouteChildren,
-)
-
-interface WikiRouteRouteChildren {
-  WikiNewRoute: typeof WikiNewRoute
-  WikiIndexRoute: typeof WikiIndexRoute
-}
-
-const WikiRouteRouteChildren: WikiRouteRouteChildren = {
-  WikiNewRoute: WikiNewRoute,
-  WikiIndexRoute: WikiIndexRoute,
-}
-
-const WikiRouteRouteWithChildren = WikiRouteRoute._addFileChildren(
-  WikiRouteRouteChildren,
-)
 
 interface AuthRequiredRouteChildren {
   AuthRequiredDashboardRoute: typeof AuthRequiredDashboardRoute
@@ -388,8 +183,6 @@ const AuthRequiredRouteWithChildren = AuthRequiredRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DormRouteRoute: DormRouteRouteWithChildren,
-  WikiRouteRoute: WikiRouteRouteWithChildren,
   R404Route: R404Route,
   AuthRequiredRoute: AuthRequiredRouteWithChildren,
   AuthSignInRoute: AuthSignInRoute,

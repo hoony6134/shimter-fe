@@ -261,7 +261,7 @@ export function SignUpForm() {
             <span className="text-sm text-slate-600">이미 계정이 있나요? </span>
             <Link
               to="/auth/sign-in"
-              className="text-sm text-blue-600 font-semibold hover:text-blue-800 transition-colors"
+              className="text-sm text-emerald-600 font-semibold hover:text-blue-800 transition-colors"
             >
               로그인
             </Link>
