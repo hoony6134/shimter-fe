@@ -14,12 +14,14 @@ interface WebcamComponentType {
   setShowCamera: Dispatch<SetStateAction<boolean>>
   setImageUrl: Dispatch<SetStateAction<string | null>>
   onAnalysisComplete?: (result: AIAnalysisResponse) => void
+  onAnalysisStart?: () => void
 }
 
 function WebcamComponent({
   setShowCamera,
   setImageUrl,
   onAnalysisComplete,
+  onAnalysisStart,
 }: WebcamComponentType) {
   const webcamRef = React.useRef<Webcam>(null)
   const [isCapturing, setIsCapturing] = useState(false)
@@ -209,6 +211,10 @@ function WebcamComponent({
         // AI 분석 요청
         if (onAnalysisComplete) {
           setIsUploading(true)
+          // 분석 시작을 알림
+          if (onAnalysisStart) {
+            onAnalysisStart()
+          }
           try {
             // Base64를 Blob으로 변환
             const response = await fetch(imageSrc)
@@ -241,7 +247,14 @@ function WebcamComponent({
       setError('사진 촬영 중 오류가 발생했습니다.')
       setIsCapturing(false)
     }
-  }, [webcamRef, isWebcamReady, setImageUrl, setShowCamera, onAnalysisComplete])
+  }, [
+    webcamRef,
+    isWebcamReady,
+    setImageUrl,
+    setShowCamera,
+    onAnalysisComplete,
+    onAnalysisStart,
+  ])
 
   const toggleCamera = () => {
     setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'))

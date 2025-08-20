@@ -22,6 +22,7 @@ function Live() {
   const [showCamera, setShowCamera] = useState(false)
   const [imageUrl, setImageUrl] = useState<null | string>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const [analysisResult, setAnalysisResult] =
     useState<AIAnalysisResponse | null>(null)
@@ -43,10 +44,16 @@ function Live() {
     setShowCamera(true)
     setImageUrl(null)
     setAnalysisResult(null)
+    setIsAnalyzing(false)
   }
 
   const handleAnalysisComplete = (result: AIAnalysisResponse) => {
     setAnalysisResult(result)
+    setIsAnalyzing(false)
+  }
+
+  const handleAnalysisStart = () => {
+    setIsAnalyzing(true)
   }
 
   const handleDownload = () => {
@@ -148,6 +155,7 @@ function Live() {
                       setShowCamera={setShowCamera}
                       setImageUrl={setImageUrl}
                       onAnalysisComplete={handleAnalysisComplete}
+                      onAnalysisStart={handleAnalysisStart}
                     />
                   </div>
                 )}
@@ -164,6 +172,22 @@ function Live() {
                         <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                           촬영 완료
                         </div>
+                        {isAnalyzing && (
+                          <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                            <div className="bg-white/90 rounded-2xl p-6 text-center">
+                              <RefreshCw
+                                size={48}
+                                className="animate-spin text-emerald-600 mx-auto mb-4"
+                              />
+                              <p className="text-gray-800 font-medium text-lg mb-2">
+                                AI 분석 중...
+                              </p>
+                              <p className="text-gray-600 text-sm">
+                                작물 상태를 분석하고 있습니다
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -238,6 +262,7 @@ function Live() {
                         onClick={() => {
                           setImageUrl(null)
                           setAnalysisResult(null)
+                          setIsAnalyzing(false)
                         }}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
                       >
