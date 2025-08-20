@@ -7,39 +7,21 @@ export interface PostUserRequest {
   email: string
   password: string
   name: string
-  nickname: string
-  school: string
-  number: string
+  phoneNumber: string
+  deviceId: string
 }
-
-enum UserVerifyStatus {
-  NONE = 'NONE',
-  PENDING = 'PENDING',
-  VERIFIED = 'VERIFIED',
-}
-
-enum UserSchool {
-  GIST = 'GIST',
-  POSTECH = 'POSTECH',
-  KAIST = 'KAIST',
-  SNU = 'SNU',
-}
-
 export interface PostUserResponse {
-  id: number
+  id: string
   email: string
   name: string
-  school: UserSchool
-  isVerified: boolean
-  verifyStatus: UserVerifyStatus
-  isAdmin: boolean
-  createdAt: string
-  updatedAt: string
+  password: string
+  phoneNumber: string
+  deviceId: string
 }
 
 export const postUser = async (signupData: PostUserRequest) => {
   try {
-    const response = await api.post<PostUserResponse>('/user', signupData)
+    const response = await api.post<PostUserResponse>('/user/join', signupData)
     return response.data
   } catch (error) {
     if (isAxiosError(error)) {

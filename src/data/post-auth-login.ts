@@ -17,7 +17,7 @@ export const postAuthLogin = async (
   loginData: PostLoginRequest,
 ): Promise<PostLoginResponse | undefined> => {
   try {
-    const response = await api.post<PostLoginResponse>('/auth/login', loginData)
+    const response = await api.post<PostLoginResponse>('/user/login', loginData)
     useToken.getState().saveToken(response.data.access_token)
 
     return response.data

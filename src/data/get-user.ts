@@ -3,35 +3,20 @@ import { toast } from 'sonner'
 
 import { api } from '../lib/api'
 
-export enum School {
-  GIST = 'GIST',
-  POSTECH = 'POSTECH',
-  KAIST = 'KAIST',
-  서울대학교 = 'SNU',
-}
-
-export enum VerifyStatus {
-  VERIFIED = 'VERIFIED',
-  AWAIT = 'AWAIT',
-  NONE = 'NONE',
-}
-
 export interface GetUserResponse {
   id: number
   email: string
   name: string
   nickname: string
-  school: School
-  number: string
-  isAdmin: boolean
-  verifyStatus: VerifyStatus
-  createdAt: string
-  updatedAt: string
+  phoneNumber: string
+  deviceId: string
 }
 
-export const getUser = async (): Promise<GetUserResponse | undefined> => {
+export const getUser = async (
+  id: number,
+): Promise<GetUserResponse | undefined> => {
   try {
-    const response = await api.get<GetUserResponse>('/user')
+    const response = await api.get<GetUserResponse>(`/user/${id}`)
 
     return response.data
   } catch (error) {
