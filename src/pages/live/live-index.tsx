@@ -159,9 +159,8 @@ function Live() {
                         <img
                           src={imageUrl}
                           alt="촬영된 작물 이미지"
-                          className="w-80 h-80 rounded-2xl object-cover shadow-lg border-4 border-white"
+                          className="w-full rounded-2xl object-cover shadow-lg border-4 border-white"
                         />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-2xl transition-all duration-200" />
                         <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                           촬영 완료
                         </div>

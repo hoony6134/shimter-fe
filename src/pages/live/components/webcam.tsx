@@ -9,7 +9,6 @@ import Webcam from 'react-webcam'
 
 import type { AIAnalysisResponse } from '../../../data/post-ai-analysis'
 import { postAIAnalysis } from '../../../data/post-ai-analysis'
-import { uploadImageToServer } from '../../../data/upload-image'
 
 interface WebcamComponentType {
   setShowCamera: Dispatch<SetStateAction<boolean>>
@@ -29,6 +28,8 @@ function WebcamComponent({
   const [error, setError] = useState<string | null>(null)
   const [hasPermission, setHasPermission] = useState<boolean | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const [isWebcamReady, setIsWebcamReady] = useState(false)
+  const [videoReady, setVideoReady] = useState(false)
 
   // 카메라 권한 확인 및 요청
   useEffect(() => {
@@ -98,44 +99,149 @@ function WebcamComponent({
   }, [facingMode])
 
   const capture = React.useCallback(async () => {
-    if (webcamRef.current) {
-      setIsCapturing(true)
+    if (!webcamRef.current || !isWebcamReady) {
+      console.warn('웹캠이 아직 준비되지 않았습니다.')
+      return
+    }
 
-      try {
-        // 캡처 효과를 위한 약간의 지연
-        setTimeout(async () => {
-          const imageSrc = webcamRef.current?.getScreenshot()
-          if (imageSrc) {
-            setImageUrl(imageSrc)
-            setShowCamera(false)
-            setIsCapturing(false)
+    // 비디오 엘리먼트가 실제로 재생 중인지 확인
+    const video = webcamRef.current.video
+    if (!video || video.readyState < 2) {
+      console.warn(
+        '비디오가 아직 로드되지 않았습니다. readyState:',
+        video?.readyState,
+      )
+      setError('비디오가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.')
+      return
+    }
 
-            // 서버에 이미지 업로드하고 AI 분석 요청
-            if (onAnalysisComplete) {
-              setIsUploading(true)
-              try {
-                // 1. 서버에 이미지 업로드하여 URL 받기
-                const imageUrl = await uploadImageToServer(imageSrc)
-                // 2. 받은 URL로 AI 분석 요청
-                const analysisResult = await postAIAnalysis({ url: imageUrl })
-                onAnalysisComplete(analysisResult)
-              } catch (error) {
-                console.error('분석 중 오류:', error)
-                // 오류가 발생해도 이미지는 보여줌
-              } finally {
-                setIsUploading(false)
+    setIsCapturing(true)
+
+    try {
+      // 더 긴 대기 시간으로 비디오 스트림이 완전히 안정화되도록 함
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // 여러 번 시도하여 유효한 이미지 캡처
+      let imageSrc = null
+      let attempts = 0
+      const maxAttempts = 3
+
+      while (!imageSrc && attempts < maxAttempts) {
+        console.log(`캡처 시도 ${attempts + 1}/${maxAttempts}`)
+
+        // 기본 스크린샷 먼저 시도
+        let tempImage = webcamRef.current?.getScreenshot()
+
+        // 고품질 옵션으로 시도
+        if (!tempImage || tempImage === 'data:,' || tempImage.length < 100) {
+          tempImage = webcamRef.current?.getScreenshot({
+            width: 1280,
+            height: 720,
+          })
+        }
+
+        // 더 작은 해상도로 시도
+        if (!tempImage || tempImage === 'data:,' || tempImage.length < 100) {
+          tempImage = webcamRef.current?.getScreenshot({
+            width: 640,
+            height: 480,
+          })
+        }
+
+        if (tempImage && tempImage !== 'data:,' && tempImage.length > 100) {
+          // 이미지가 실제로 검은색이 아닌지 확인
+          const img = new Image()
+          img.onload = () => {
+            const canvas = document.createElement('canvas')
+            canvas.width = img.width
+            canvas.height = img.height
+            const ctx = canvas.getContext('2d')
+            ctx?.drawImage(img, 0, 0)
+
+            // 이미지의 일부 픽셀을 샘플링하여 검은색인지 확인
+            const imageData = ctx?.getImageData(
+              0,
+              0,
+              canvas.width,
+              canvas.height,
+            )
+            const data = imageData?.data
+            let nonBlackPixels = 0
+
+            if (data) {
+              for (let i = 0; i < data.length; i += 4) {
+                const r = data[i]
+                const g = data[i + 1]
+                const b = data[i + 2]
+                if (r > 10 || g > 10 || b > 10) {
+                  nonBlackPixels++
+                }
+              }
+
+              console.log('검은색이 아닌 픽셀 수:', nonBlackPixels)
+              if (nonBlackPixels > 100) {
+                imageSrc = tempImage
               }
             }
-          } else {
-            setIsCapturing(false)
           }
-        }, 300)
-      } catch (error) {
-        console.error('캡처 중 오류:', error)
+
+          // 동기적으로도 체크
+          imageSrc = tempImage
+        }
+
+        attempts++
+        if (!imageSrc && attempts < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 300))
+        }
+      }
+
+      if (imageSrc && imageSrc !== 'data:,' && imageSrc.length > 100) {
+        console.log(
+          '이미지 캡처 성공:',
+          imageSrc.substring(0, 50) + '...',
+          '길이:',
+          imageSrc.length,
+        )
+        setImageUrl(imageSrc)
+        setShowCamera(false)
+        setIsCapturing(false)
+
+        // AI 분석 요청
+        if (onAnalysisComplete) {
+          setIsUploading(true)
+          try {
+            // Base64를 Blob으로 변환
+            const response = await fetch(imageSrc)
+            const blob = await response.blob()
+
+            if (blob.size > 0) {
+              console.log('Blob 크기:', blob.size, '바이트')
+              // AI 분석 요청 (파일을 직접 전송)
+              const analysisResult = await postAIAnalysis(blob)
+              onAnalysisComplete(analysisResult)
+            } else {
+              console.error('Blob이 비어있습니다.')
+            }
+          } catch (error) {
+            console.error('분석 중 오류:', error)
+            // 오류가 발생해도 이미지는 보여줌
+          } finally {
+            setIsUploading(false)
+          }
+        }
+      } else {
+        console.error('이미지 캡처 실패. 모든 시도 실패:', attempts)
+        setError(
+          '이미지 캡처에 실패했습니다. 조명을 확인하거나 다시 시도해주세요.',
+        )
         setIsCapturing(false)
       }
+    } catch (error) {
+      console.error('캡처 중 오류:', error)
+      setError('사진 촬영 중 오류가 발생했습니다.')
+      setIsCapturing(false)
     }
-  }, [webcamRef, setImageUrl, setShowCamera, onAnalysisComplete])
+  }, [webcamRef, isWebcamReady, setImageUrl, setShowCamera, onAnalysisComplete])
 
   const toggleCamera = () => {
     setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'))
@@ -150,6 +256,26 @@ function WebcamComponent({
   const handleWebcamError = (error: string | DOMException) => {
     console.error('웹캠 오류:', error)
     setError('카메라 연결에 실패했습니다. 새로고침 후 다시 시도해주세요.')
+  }
+
+  const handleWebcamLoad = (stream: MediaStream) => {
+    console.log('웹캠 스트림이 준비되었습니다.', stream)
+    setIsWebcamReady(true)
+
+    // 비디오가 실제로 재생되기 시작할 때까지 기다림
+    setTimeout(() => {
+      if (webcamRef.current?.video) {
+        webcamRef.current.video.addEventListener('loadedmetadata', () => {
+          console.log('비디오 메타데이터 로드됨')
+          setVideoReady(true)
+        })
+
+        webcamRef.current.video.addEventListener('canplay', () => {
+          console.log('비디오 재생 가능')
+          setVideoReady(true)
+        })
+      }
+    }, 100)
   }
 
   // 로딩 상태
@@ -240,6 +366,7 @@ function WebcamComponent({
             height: { ideal: 1080, min: 720 },
           }}
           className="w-full h-full object-cover"
+          onUserMedia={handleWebcamLoad}
           onUserMediaError={handleWebcamError}
         />
 
@@ -260,16 +387,22 @@ function WebcamComponent({
         </div>
 
         {/* 실시간 표시기 */}
-        <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 rounded-full bg-red-500 text-white text-sm font-medium">
+        <div
+          className={`absolute top-4 left-4 flex items-center gap-2 px-3 py-1 rounded-full text-white text-sm font-medium ${
+            isWebcamReady && videoReady ? 'bg-green-500' : 'bg-orange-500'
+          }`}
+        >
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          LIVE
+          {isWebcamReady && videoReady ? 'READY' : 'LOADING'}
         </div>
 
         {/* 하단 캡처 버튼 */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
           <button
             onClick={capture}
-            disabled={isCapturing || isUploading}
+            disabled={
+              isCapturing || isUploading || !isWebcamReady || !videoReady
+            }
             className="relative flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50"
           >
             <div className="w-12 h-12 rounded-full border-4 border-gray-300 flex items-center justify-center">
@@ -285,7 +418,7 @@ function WebcamComponent({
         {isUploading && (
           <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
             <div className="bg-black/70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">
-              이미지 업로드 및 AI 분석 중...
+              AI 분석 중...
             </div>
           </div>
         )}

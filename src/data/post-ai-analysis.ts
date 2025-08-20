@@ -1,9 +1,5 @@
 import api from '../lib/api'
 
-export interface AIAnalysisRequest {
-  url: string
-}
-
 export interface AIAnalysisResponse {
   class:
     | 'normal'
@@ -16,8 +12,15 @@ export interface AIAnalysisResponse {
 }
 
 export const postAIAnalysis = async (
-  data: AIAnalysisRequest,
+  file: File | Blob,
 ): Promise<AIAnalysisResponse> => {
-  const response = await api.post<AIAnalysisResponse>('/ai', data)
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await api.post<AIAnalysisResponse>('/ai', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
   return response.data
 }
