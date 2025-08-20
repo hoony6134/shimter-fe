@@ -9,14 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LiveRouteImport } from './routes/live'
 import { Route as AuthRequiredRouteImport } from './routes/_auth-required'
 import { Route as R404RouteImport } from './routes/404'
+import { Route as PlantRouteRouteImport } from './routes/plant/route'
+import { Route as CommunityRouteRouteImport } from './routes/community/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
+import { Route as PlantIndexRouteImport } from './routes/plant/index'
+import { Route as CommunityIndexRouteImport } from './routes/community/index'
+import { Route as PlantIdRouteImport } from './routes/plant/$id'
+import { Route as CommunityWriteRouteImport } from './routes/community/write'
+import { Route as CommunityIdRouteImport } from './routes/community/$id'
 import { Route as AuthSignUpRouteImport } from './routes/auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthRequiredDashboardRouteImport } from './routes/_auth-required/dashboard'
 
+const LiveRoute = LiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRequiredRoute = AuthRequiredRouteImport.update({
   id: '/_auth-required',
   getParentRoute: () => rootRouteImport,
@@ -26,15 +38,45 @@ const R404Route = R404RouteImport.update({
   path: '/404',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlantRouteRoute = PlantRouteRouteImport.update({
+  id: '/plant',
+  path: '/plant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRouteRoute = CommunityRouteRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthVerifyRoute = AuthVerifyRouteImport.update({
-  id: '/auth/verify',
-  path: '/auth/verify',
-  getParentRoute: () => rootRouteImport,
+const PlantIndexRoute = PlantIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlantRouteRoute,
+} as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CommunityRouteRoute,
+} as any)
+const PlantIdRoute = PlantIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PlantRouteRoute,
+} as any)
+const CommunityWriteRoute = CommunityWriteRouteImport.update({
+  id: '/write',
+  path: '/write',
+  getParentRoute: () => CommunityRouteRoute,
+} as any)
+const CommunityIdRoute = CommunityIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => CommunityRouteRoute,
 } as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
   id: '/auth/sign-up',
@@ -54,69 +96,116 @@ const AuthRequiredDashboardRoute = AuthRequiredDashboardRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/community': typeof CommunityRouteRouteWithChildren
+  '/plant': typeof PlantRouteRouteWithChildren
   '/404': typeof R404Route
+  '/live': typeof LiveRoute
   '/dashboard': typeof AuthRequiredDashboardRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/auth/verify': typeof AuthVerifyRoute
+  '/community/$id': typeof CommunityIdRoute
+  '/community/write': typeof CommunityWriteRoute
+  '/plant/$id': typeof PlantIdRoute
+  '/community/': typeof CommunityIndexRoute
+  '/plant/': typeof PlantIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/404': typeof R404Route
+  '/live': typeof LiveRoute
   '/dashboard': typeof AuthRequiredDashboardRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/auth/verify': typeof AuthVerifyRoute
+  '/community/$id': typeof CommunityIdRoute
+  '/community/write': typeof CommunityWriteRoute
+  '/plant/$id': typeof PlantIdRoute
+  '/community': typeof CommunityIndexRoute
+  '/plant': typeof PlantIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/community': typeof CommunityRouteRouteWithChildren
+  '/plant': typeof PlantRouteRouteWithChildren
   '/404': typeof R404Route
   '/_auth-required': typeof AuthRequiredRouteWithChildren
+  '/live': typeof LiveRoute
   '/_auth-required/dashboard': typeof AuthRequiredDashboardRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
-  '/auth/verify': typeof AuthVerifyRoute
+  '/community/$id': typeof CommunityIdRoute
+  '/community/write': typeof CommunityWriteRoute
+  '/plant/$id': typeof PlantIdRoute
+  '/community/': typeof CommunityIndexRoute
+  '/plant/': typeof PlantIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/community'
+    | '/plant'
     | '/404'
+    | '/live'
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
-    | '/auth/verify'
+    | '/community/$id'
+    | '/community/write'
+    | '/plant/$id'
+    | '/community/'
+    | '/plant/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/404'
+    | '/live'
     | '/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
-    | '/auth/verify'
+    | '/community/$id'
+    | '/community/write'
+    | '/plant/$id'
+    | '/community'
+    | '/plant'
   id:
     | '__root__'
     | '/'
+    | '/community'
+    | '/plant'
     | '/404'
     | '/_auth-required'
+    | '/live'
     | '/_auth-required/dashboard'
     | '/auth/sign-in'
     | '/auth/sign-up'
-    | '/auth/verify'
+    | '/community/$id'
+    | '/community/write'
+    | '/plant/$id'
+    | '/community/'
+    | '/plant/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommunityRouteRoute: typeof CommunityRouteRouteWithChildren
+  PlantRouteRoute: typeof PlantRouteRouteWithChildren
   R404Route: typeof R404Route
   AuthRequiredRoute: typeof AuthRequiredRouteWithChildren
+  LiveRoute: typeof LiveRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  AuthVerifyRoute: typeof AuthVerifyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/live': {
+      id: '/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth-required': {
       id: '/_auth-required'
       path: ''
@@ -131,6 +220,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof R404RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plant': {
+      id: '/plant'
+      path: '/plant'
+      fullPath: '/plant'
+      preLoaderRoute: typeof PlantRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -138,12 +241,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/verify': {
-      id: '/auth/verify'
-      path: '/auth/verify'
-      fullPath: '/auth/verify'
-      preLoaderRoute: typeof AuthVerifyRouteImport
-      parentRoute: typeof rootRouteImport
+    '/plant/': {
+      id: '/plant/'
+      path: '/'
+      fullPath: '/plant/'
+      preLoaderRoute: typeof PlantIndexRouteImport
+      parentRoute: typeof PlantRouteRoute
+    }
+    '/community/': {
+      id: '/community/'
+      path: '/'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof CommunityRouteRoute
+    }
+    '/plant/$id': {
+      id: '/plant/$id'
+      path: '/$id'
+      fullPath: '/plant/$id'
+      preLoaderRoute: typeof PlantIdRouteImport
+      parentRoute: typeof PlantRouteRoute
+    }
+    '/community/write': {
+      id: '/community/write'
+      path: '/write'
+      fullPath: '/community/write'
+      preLoaderRoute: typeof CommunityWriteRouteImport
+      parentRoute: typeof CommunityRouteRoute
+    }
+    '/community/$id': {
+      id: '/community/$id'
+      path: '/$id'
+      fullPath: '/community/$id'
+      preLoaderRoute: typeof CommunityIdRouteImport
+      parentRoute: typeof CommunityRouteRoute
     }
     '/auth/sign-up': {
       id: '/auth/sign-up'
@@ -169,6 +300,36 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CommunityRouteRouteChildren {
+  CommunityIdRoute: typeof CommunityIdRoute
+  CommunityWriteRoute: typeof CommunityWriteRoute
+  CommunityIndexRoute: typeof CommunityIndexRoute
+}
+
+const CommunityRouteRouteChildren: CommunityRouteRouteChildren = {
+  CommunityIdRoute: CommunityIdRoute,
+  CommunityWriteRoute: CommunityWriteRoute,
+  CommunityIndexRoute: CommunityIndexRoute,
+}
+
+const CommunityRouteRouteWithChildren = CommunityRouteRoute._addFileChildren(
+  CommunityRouteRouteChildren,
+)
+
+interface PlantRouteRouteChildren {
+  PlantIdRoute: typeof PlantIdRoute
+  PlantIndexRoute: typeof PlantIndexRoute
+}
+
+const PlantRouteRouteChildren: PlantRouteRouteChildren = {
+  PlantIdRoute: PlantIdRoute,
+  PlantIndexRoute: PlantIndexRoute,
+}
+
+const PlantRouteRouteWithChildren = PlantRouteRoute._addFileChildren(
+  PlantRouteRouteChildren,
+)
+
 interface AuthRequiredRouteChildren {
   AuthRequiredDashboardRoute: typeof AuthRequiredDashboardRoute
 }
@@ -183,11 +344,13 @@ const AuthRequiredRouteWithChildren = AuthRequiredRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommunityRouteRoute: CommunityRouteRouteWithChildren,
+  PlantRouteRoute: PlantRouteRouteWithChildren,
   R404Route: R404Route,
   AuthRequiredRoute: AuthRequiredRouteWithChildren,
+  LiveRoute: LiveRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  AuthVerifyRoute: AuthVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

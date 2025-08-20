@@ -30,9 +30,21 @@ export default function Header() {
           >
             회원가입
           </Link>
-          <Link to="/auth/sign-up">
+          <Link
+            to="/community"
+            className="hover:font-semibold transition-all relative after:content-[''] after:block after:h-[2px] after:bg-current after:w-0 hover:after:w-full after:transition-all after:duration-300 after:absolute after:left-0 after:-bottom-1"
+          >
+            커뮤니티
+          </Link>
+          <Link
+            to="/plant"
+            className="hover:font-semibold transition-all relative after:content-[''] after:block after:h-[2px] after:bg-current after:w-0 hover:after:w-full after:transition-all after:duration-300 after:absolute after:left-0 after:-bottom-1"
+          >
+            질병 모니터링
+          </Link>
+          <Link to="/live">
             <Button
-              children="바로 시작하기"
+              children="실시간 대시보드"
               variant="primary"
               className="bg-gradient-to-br from-emerald-600 to-teal-500"
             />

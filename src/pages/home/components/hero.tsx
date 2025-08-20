@@ -21,7 +21,7 @@ function Hero() {
           작물 질병 진단, 모니터링과 관리 방법을 한 눈에
         </p>
         <div className="flex items-center justify-start w-full gap-4">
-          <Link to="/auth/sign-up">
+          <Link to="/live">
             <Button>바로 시작하기</Button>
           </Link>
           {/* <Button variant="outline">더 알아보기</Button> */}
