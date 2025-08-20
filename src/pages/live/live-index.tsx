@@ -268,47 +268,6 @@ function Live() {
           {/* 사이드바 정보 */}
           <div className="space-y-6">
             {/* 센서 데이터 */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <Gauge size={20} className="text-indigo-600" />
-                실시간 센서 데이터
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-orange-50 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Thermometer className="text-orange-600" size={20} />
-                    <span className="text-sm font-medium text-gray-700">
-                      온도
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-orange-600">
-                    24°C
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Droplets className="text-emerald-600" size={20} />
-                    <span className="text-sm font-medium text-gray-700">
-                      습도
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-emerald-600">
-                    65%
-                  </span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Sun className="text-yellow-600" size={20} />
-                    <span className="text-sm font-medium text-gray-700">
-                      조도
-                    </span>
-                  </div>
-                  <span className="text-lg font-bold text-yellow-600">
-                    850 lx
-                  </span>
-                </div>
-              </div>
-            </div>
 
             {/* 분석 결과 */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
@@ -366,19 +325,44 @@ function Live() {
               )}
             </div>
 
-            {/* 통계 */}
             <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                이번 주 통계
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Gauge size={20} className="text-indigo-600" />
+                실시간 센서 데이터
               </h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="text-center p-3 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
-                  <p className="text-2xl font-bold text-purple-600">12</p>
-                  <p className="text-xs text-gray-600">촬영 횟수</p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-orange-50 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Thermometer className="text-orange-600" size={20} />
+                    <span className="text-sm font-medium text-gray-700">
+                      온도
+                    </span>
+                  </div>
+                  <span className="text-lg font-bold text-orange-600">
+                    24°C
+                  </span>
                 </div>
-                <div className="text-center p-3 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
-                  <p className="text-2xl font-bold text-green-600">98%</p>
-                  <p className="text-xs text-gray-600">건강 지수</p>
+                <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Droplets className="text-emerald-600" size={20} />
+                    <span className="text-sm font-medium text-gray-700">
+                      습도
+                    </span>
+                  </div>
+                  <span className="text-lg font-bold text-emerald-600">
+                    65%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Sun className="text-yellow-600" size={20} />
+                    <span className="text-sm font-medium text-gray-700">
+                      조도
+                    </span>
+                  </div>
+                  <span className="text-lg font-bold text-yellow-600">
+                    850 lx
+                  </span>
                 </div>
               </div>
             </div>
