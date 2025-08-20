@@ -12,11 +12,9 @@ export interface GetUserResponse {
   deviceId: string
 }
 
-export const getUser = async (
-  id: number,
-): Promise<GetUserResponse | undefined> => {
+export const getUser = async (): Promise<GetUserResponse | undefined> => {
   try {
-    const response = await api.get<GetUserResponse>(`/user/${id}`)
+    const response = await api.get<GetUserResponse>('/user/me')
 
     return response.data
   } catch (error) {
